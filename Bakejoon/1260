@@ -1,0 +1,78 @@
+#include <iostream>
+#include <vector>
+#include <queue>
+#include <algorithm>
+using namespace std;
+
+vector<int> order;
+vector<int> order2;
+
+int find_dfs(int start, bool* visited, vector<int>* v) {
+	visited[start] = true;
+	order.push_back(start);
+	
+	for (int i = 0; i < v[start].size(); i++) {
+		
+		for (int i = 0; i < v[start].size(); i++) {
+			sort(v[start].begin(), v[start].end());
+		}
+		if (!visited[v[start][i]]) {
+			find_dfs(v[start][i], visited, v);
+			
+		}
+	}
+	return 0;
+}
+
+int find_bfs(int start, bool* visited, queue<int>* que, vector<int>* v) {
+	visited[start] = true;
+	order2.push_back(start);
+	que->push(start);
+
+	while (!que->empty()) {
+		int x = que->front();
+		for (int i = 0; i < v[x].size(); i++) {
+			if (!visited[v[x][i]]) {
+				visited[v[x][i]] = true;
+				que->push(v[x][i]);
+				order2.push_back(v[x][i]);
+			}
+		}
+		que->pop();
+	}
+	return 0;
+}
+
+int main() {
+	int node, edge, start;
+	cin >> node >> edge >> start;
+	vector<int>*v = new vector<int>[node + 1];
+	bool* visited = new bool[node + 1];
+	bool* visited2 = new bool[node + 1];
+	queue<int> que;
+	for (int i = 0; i < node + 1; i++) {
+		visited[i] = false;
+		visited2[i] = false;
+	}
+
+	for (int i = 0; i < edge; i++) {
+		int start, temp_edge;
+		cin >> start >> temp_edge;
+		v[start].push_back(temp_edge);
+		v[temp_edge].push_back(start);
+	}
+
+	find_dfs(start, visited, v);
+
+	for (int i = 0; i < order.size(); i++) {
+		cout << order[i] << " ";
+	}
+	cout << endl;
+	find_bfs(start, visited2, &que,v);
+	for (int i = 0; i < order2.size(); i++) {
+		cout << order2[i] << " ";
+	}
+	cout << endl;
+
+	return 0;
+}
