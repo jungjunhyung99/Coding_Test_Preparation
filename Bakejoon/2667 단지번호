@@ -1,0 +1,61 @@
+#include <iostream>
+#include <vector>
+#include <queue>
+#include <algorithm>
+using namespace std;
+
+int dx[4] = {-1,0,1,0};
+int dy[4] = { 0,1,0,-1 };
+int N;
+bool visited[26][26] = { 0, };
+int house = 0;
+vector<int> order;
+char v[26][26];
+
+void find_dfs(int x, int y) {
+	
+	for (int i = 0; i < 4; i++) {
+		int nx = x + dx[i];
+		int ny = y + dy[i];
+
+		if (nx < 0 || ny < 0 && nx > N || ny > N) {
+			continue;
+		}
+
+		if (v[nx][ny] == '1' && !visited[nx][ny]) {
+			visited[nx][ny] = true;
+			house++;
+			find_dfs(nx, ny);
+		}
+	}
+}
+
+int main() {
+	
+	cin >> N;
+	for(int i = 0; i < N; i++) {
+		for (int j = 0; j < N; j++) {
+			cin >> v[i][j];
+		}
+	}
+	
+	for (int i = 0; i < N; i++) {
+		for (int j = 0; j < N; j++) {
+			if (visited[i][j] == true || v[i][j] != '1') {
+				continue;
+			}
+			visited[i][j] = true;
+			house++;
+			find_dfs(i, j);
+			order.push_back(house);
+			house = 0;
+		}
+	}
+
+	cout << order.size() << endl;
+	sort(order.begin(), order.end());
+
+	for (int i = 0; i < order.size(); i++) {
+		cout << order[i] << endl;
+	}
+}
