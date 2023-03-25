@@ -1,0 +1,58 @@
+#include <iostream>
+#include <vector>
+#include <queue>
+#include <stack>
+using namespace std;
+
+int main() {
+	
+	string s;
+	int num;
+	int pointer = 0;
+	stack<char> st, reserve;
+	cin >> s;
+	cin >> num;
+	for (int i = 0; i < s.size(); i++) {
+		st.push(s[i]);
+	}
+
+	for (int i = 0; i < num; i++) {
+		char prompt, alpha;
+		cin >> prompt;
+		if (prompt == 'P') {
+			cin >> alpha;
+			st.push(alpha);
+		}
+		else if (prompt == 'L') {
+			if (st.size() == 0) continue;
+			char res = st.top();
+			st.pop();
+			reserve.push(res);
+		}
+		else if (prompt == 'D') {
+			if (reserve.size() == 0) continue;
+			char res = reserve.top();
+			reserve.pop();
+			st.push(res);
+		}
+		else if (prompt == 'B') {
+			if (st.size() == 0) {
+				continue;
+			}
+			st.pop();
+		}
+	}
+
+	for (int i = 0; st.size() != 0; i++) {
+		char res = st.top();
+		st.pop();
+		reserve.push(res);
+	}
+
+	for (int i = 0; reserve.size(); i++) {
+		cout << reserve.top();
+		reserve.pop();
+	}
+
+	return 0;
+}
