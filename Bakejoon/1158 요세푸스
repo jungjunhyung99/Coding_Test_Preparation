@@ -1,0 +1,42 @@
+#include <iostream>
+#include <vector>
+#include <queue>
+#include <stack>
+using namespace std;
+
+queue<int> que;
+vector<int> order;
+int main() {
+	int N, K; 
+	int count = 1;
+	cin >> N >> K;
+
+	for (int i = 1; i <= N; i++) {
+		que.push(i);
+	}
+	
+	while (!que.empty()) {
+		if (count % K == 0) {
+			count = 1;
+			order.push_back(que.front());
+			que.pop();
+		}
+		else {
+			count++;
+			que.push(que.front());
+			que.pop();
+		}
+	}
+
+	cout << "<";
+	for (int i = 0; i < order.size(); i++) {
+		if (i == order.size() - 1) {
+			cout << order[i];
+			break;
+		}
+		cout <<order[i] << ", ";
+	}
+	cout << ">";
+
+	return 0;
+}
