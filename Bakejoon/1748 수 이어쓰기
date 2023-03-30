@@ -1,0 +1,24 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+int n;
+int cnt = 1;
+int sum = 0;
+int spot = 1;
+
+int main() {
+	cin >> n;
+	
+	for (int i = 1; i <= n; i++) {
+		if (i ==  spot * 10) {
+			cnt++;
+			spot *= 10;
+		}
+		sum += cnt;
+	}
+
+	cout << sum << endl;
+	return 0;
+}
