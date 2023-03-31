@@ -1,0 +1,40 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+vector<int> v;
+vector<int> order;
+int n;
+
+
+
+int main() {
+	int sum = 0;
+	for (int i = 0; i < 9; i++) {
+		int num;
+		cin >> num;
+		v.push_back(num);
+		sum += num;
+	}
+	int index1, index2;
+	for (int i = 0; i < v.size() - 1; i++) {
+		for (int j = i + 1; j < v.size(); j++) {
+			if ((sum - v[i] - v[j]) == 100) {
+				index1 = v[i], index2 = v[j]; 
+				break;
+			}
+		}
+	}
+
+
+	sort(v.begin(), v.end());
+
+	for (int i = 0; i < 9; i++) {
+		if (v[i] != index1 && v[i] != index2) {
+			cout << v[i] << endl;
+		}
+	}
+
+	return 0;
+}
