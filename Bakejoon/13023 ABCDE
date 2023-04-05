@@ -1,0 +1,55 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+
+vector<int> v[2001];
+bool visited[2001] = {0,};
+int N, M;
+int cnt = 0;
+
+void bfs(int num, int depth) {
+	if (depth == 4)
+	{
+		cnt = 1;
+		return;
+	}
+
+	for (int i = 0; i < v[num].size(); i++) {
+		if (visited[v[num][i]] != true ) {
+			visited[v[num][i]] = true;
+			bfs(v[num][i],depth + 1);
+			visited[v[num][i]] = false;
+		}
+	}
+}
+
+
+int main() {
+	cin >> N >> M;
+	
+	for (int i = 0; i < M; i++) {
+		int a, b;
+		cin >> a >> b;
+		v[a].push_back(b);
+		v[b].push_back(a);
+	}
+
+
+	for (int i = 0; i < N; i++) {
+			visited[i] = true;
+			bfs(i, 0);
+			if (cnt == 1)
+			{
+				cout << 1 << endl;
+				break;
+			}
+			fill(visited, visited + N, false);
+
+		if (i == N - 1)
+			cout << 0 << endl;
+	}
+
+	return 0;
+}
