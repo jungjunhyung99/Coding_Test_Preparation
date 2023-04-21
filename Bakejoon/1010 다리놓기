@@ -1,0 +1,28 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+
+int factorial(int b, int a) {
+    int sum = 1;
+
+    for (int i = 0; i < a; i++) {
+        sum *= b - i;
+        sum /= i + 1;
+    }
+
+    return sum;
+}
+
+int main() {
+    int cnt;
+    cin >> cnt;
+
+    for (int i = 0; i < cnt; i++) {
+        int a, b;
+        cin >> a >> b;
+        cout << factorial(b, a) << endl;
+    }
+    
+}
