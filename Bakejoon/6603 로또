@@ -1,0 +1,44 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+int num;
+int arr[13] = { 0, };
+int answer[13] = { 0, };
+bool visited[13] = { 0, };
+void bt(int depth) {
+    if (depth == 6) {
+        for (int i = 0; i < 6; i++) {
+            printf("%d ", answer[i]);
+        }
+        printf("\n");
+        return;
+    }
+    for (int i = depth; i < num; i++) {
+        if (!visited[i]) {
+            if (arr[i] <= answer[depth - 1]) continue;
+            visited[i] = true;
+            answer[depth] = arr[i];
+            bt(depth + 1);
+            visited[i] = false;
+        }
+    }
+}
+
+int main() {
+    while (1) {
+        cin >> num;
+        if (num == 0) break;
+        for (int i = 0; i < num; i++) {
+            int a;
+            cin >> a;
+            arr[i] = a;
+        }
+        bt(0);
+        printf("\n");
+        for (int i = 0; i < num; i++) {
+            arr[i] = 0;
+        }
+        }
+}
