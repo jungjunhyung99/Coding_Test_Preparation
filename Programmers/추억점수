@@ -12,3 +12,9 @@ function solution(name, yearning, photo) {
     }
     return answer;
 }
+
+
+// 다른사람의 풀이... 이렇게 풀도록 노력하자
+// function solution(name, yearning, photo) {
+//     return photo.map((v)=> v.reduce((a, c)=> a += yearning[name.indexOf(c)] ?? 0, 0))
+// }
