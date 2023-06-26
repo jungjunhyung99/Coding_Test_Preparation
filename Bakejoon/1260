@@ -76,3 +76,68 @@ int main() {
 
 	return 0;
 }
+
+// 자바스크립트 version
+
+// const fs = require("fs");
+// const filePath = process.platform === "linux" ? "/dev/stdin" : "input.txt";
+// let input = fs.readFileSync(filePath).toString().trim().split("\n");
+
+// const [N,M,V] = input[0].split(" ").map((item) => +item);
+// let graph = new Array(N + 1);
+
+// for(let i = 0; i < graph.length; i++){
+//     graph[i] = [];
+// }
+
+// for(let i = 0 ; i < M; i++){
+//     let [from, to] = input[i + 1].split(" ").map((item) => +item);
+//     graph[from].push(to);
+//     graph[to].push(from);
+// }
+
+// graph.forEach((element) => {
+//     element.sort((a,b) => a - b);
+// });
+
+// let visited = new Array(N + 1).fill(0);
+// let answer_dfs = [];
+
+// function dfs(V) {
+//     if(visited[V]){
+//         return;
+//     }
+//     answer_dfs.push(V);
+//     visited[V] = 1;
+//     for(let i = 0; i < graph[V].length; i++){
+//         let next = graph[V][i];
+//         if(visited[next] !== 1){
+//             dfs(next);
+//         }
+//     }
+// }
+
+// dfs(V);
+// console.log(answer_dfs.join(" "));
+
+// let answer_bfs = [];
+// visited.fill(0);
+// function BFS(V) {
+//   let queue = [V];
+//   while (queue.length) {
+//     let x = queue.shift();
+//     if (visited[x] === 1) {
+//       continue;
+//     }
+//     visited[x] = 1;
+//     answer_bfs.push(x);
+//     for (let i = 0; i < graph[x].length; i++) {
+//       let next = graph[x][i];
+//       if (visited[next] === 0) {
+//         queue.push(next);
+//       }
+//     }
+//   }
+// }
+// BFS(V);
+// console.log(answer_bfs.join(" "));
