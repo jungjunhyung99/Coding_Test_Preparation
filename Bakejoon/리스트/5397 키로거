@@ -1,0 +1,33 @@
+const fs = require("fs");
+const filePath = process.platform === "linux" ? "/dev/stdin" : "input.txt";
+let input = fs.readFileSync(filePath).toString().trim().split("\n");
+
+const n = +input[0];
+let arr = [];
+
+for(let i = 1; i < input.length; i++){
+    arr.push(input[i]);
+}
+
+for(let i = 0; i < n; i++){
+    let first = [];
+    let last = [];
+
+    for(let j = 0; j < arr[i].length; j++){
+        switch(arr[i][j]){
+            case '<':
+                if(first.length) last.push(first.pop());
+                break;
+            case '>':
+                if(last.length) first.push(last.pop());
+                break;
+            case '-':
+                if(first.length) first.pop();
+                break;
+            default:
+                first.push(arr[i][j]);
+                break;
+        }
+    }
+    console.log(first.join("") + last.reverse().join(""));
+}
