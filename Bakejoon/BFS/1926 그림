@@ -1,0 +1,50 @@
+const fs = require("fs");
+const filePath = process.platform === "linux" ? "/dev/stdin" : "input.txt";
+let input = fs.readFileSync(filePath).toString().trim().split("\n");
+
+let [M,N] = input[0].split(" ").map(Number);
+let arr = [];
+let queue = [];
+let visited = [];
+let dx = [0,0,1,-1];
+let dy = [1,-1,0,0];
+let pictureNum = 0;
+let area = [];
+
+for(let i = 1; i <= M; i++){
+    arr.push(input[i].split(" ").map(Number));
+    visited.push(new Array(N).fill(0));
+}
+
+function bfs() {
+    let count = 0;
+    while(queue.length){
+        let [x,y] = queue.shift();
+        count ++;
+        for(let i = 0; i < 4; i++){
+            let nx = x + dx[i];
+            let ny = y + dy[i];
+            if(nx < 0 || ny < 0 || nx >= M || ny >= N)  continue;
+            if(visited[nx][ny] || arr[nx][ny] === 0) continue;
+            queue.push([nx,ny]);
+            visited[nx][ny] = 1;
+        }
+    }
+    if(count){
+        area.push(count);
+    }
+}
+
+for(let i = 0; i < M; i++){
+    for(let j = 0; j < N; j++){
+        if(!visited[i][j] && arr[i][j] == 1){
+            visited[i][j] = 1;
+            queue.push([i,j]);
+            pictureNum++;
+            bfs();
+        }
+    }
+}
+
+console.log(pictureNum);
+console.log(area.length !== 0 ? Math.max(...area) : 0);
