@@ -1,0 +1,13 @@
+function solution(n, m, section) {
+    var answer = 0;
+    let lastIndex = 0;
+    
+    section.forEach((num) => {
+        if(num > lastIndex){
+            lastIndex = num + m - 1;
+            answer++;
+        }
+    });
+    
+    return answer;
+}
