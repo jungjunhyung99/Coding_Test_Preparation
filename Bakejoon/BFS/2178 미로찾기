@@ -1,0 +1,38 @@
+const { Console } = require("console");
+const fs = require("fs");
+const filePath = process.platform === "linux" ? "/dev/stdin" : "input.txt";
+let input = fs.readFileSync(filePath).toString().trim().split("\n");
+
+const [N, M] = input[0].split(" ").map(Number);
+let dx = [0,0,-1,1];
+let dy = [1,-1,0,0];
+let visited = [];
+let queue = [];
+
+
+for(let i = 0; i < N; i++){
+    visited.push(new Array(M).fill(0));
+}
+
+function BFS(row,col){
+    visited[row][col] = 1;
+    queue.push([row,col]);
+    while(queue.length){
+        let [x,y] = queue.shift();
+        for(let i = 0; i < 4; i++){
+            let nx = dx[i] + x;
+            let ny = dy[i] + y;
+
+            if(nx >= 0 && nx < N && ny >= 0 && ny <= M){
+                if(!visited[nx][ny] && input[nx + 1][ny] === '1'){
+                    queue.push([nx,ny]);
+                    visited[nx][ny] = visited[x][y] + 1;
+                }
+            }
+        }
+    }
+}
+
+BFS(0,0);
+
+console.log(visited[N - 1][M - 1]);
