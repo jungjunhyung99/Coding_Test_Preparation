@@ -1,0 +1,73 @@
+const fs = require("fs");
+const filePath = process.platform === "linux" ? "/dev/stdin" : "input.txt";
+let input = fs.readFileSync(filePath).toString().trim().split("\n");
+
+
+const [R, C] = input.shift().split(" ").map(Number);
+let fire = [];
+let person = [];
+let f_queue = [];
+let p_queue = [];
+let dx = [-1, 1, 0, 0];
+let dy = [0, 0, 1, -1];
+
+for(let i = 0; i < R; i++){
+    fire.push(new Array(C).fill(0));
+    person.push(new Array(C).fill(0));
+}
+
+for(let i = 0; i < R; i++){
+    let idx = input[i].indexOf('J');
+    let pos = 0;
+
+    if(idx !== -1){
+        person[i][idx] = 1;
+        p_queue.push([i,idx]);
+    }
+
+    while(1){
+        let idx = input[i].indexOf('F', pos);
+        if(idx === -1)  break;
+        fire[i][idx] = 1;
+        f_queue.push([i,idx]);
+        pos = idx + 1;
+    }
+}
+
+function BFS(){
+    while(f_queue.length){
+    let [x, y] = f_queue.shift();
+    for(let i = 0; i < 4; i++){
+        let nx = x + dx[i];
+        let ny = y + dy[i];
+
+        if(nx < 0 || nx >= R || ny < 0 || ny >= C)  continue;
+        if(fire[nx][ny] > 1 || input[nx][ny] === '#')   continue;
+
+        fire[nx][ny] = fire[x][y] + 1;
+        f_queue.push([nx, ny]);
+    }
+}
+
+while(p_queue.length){
+    let [x, y] = p_queue.shift();
+    for(let i = 0; i < 4; i++){
+        let nx = x + dx[i];
+        let ny = y + dy[i];
+
+        if(nx === -1 || nx === R - 1 || ny === -1 || ny === C - 1){
+            console.log(person[x][y] + 1);
+            return;
+        }
+
+        if(person[nx][ny] > 0|| input[nx][ny] === '#') continue;
+        if(fire[nx][ny] !== 0 && fire[nx][ny] <= person[x][y] + 1)   continue;
+
+        person[nx][ny] = person[x][y] + 1;
+        p_queue.push([nx,ny]);
+    }
+}
+console.log("IMPOSSIBLE");
+}
+
+BFS();
