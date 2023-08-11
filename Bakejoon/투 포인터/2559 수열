@@ -1,0 +1,26 @@
+const { Console } = require("console");
+const fs = require("fs");
+const filePath = process.platform === "linux" ? "/dev/stdin" : "input.txt";
+let input = fs.readFileSync(filePath).toString().trim().split("\n");
+
+const [N, S] = input.shift().split(' ').map(Number);
+let arr = input[0].split(' ').map(Number);
+let st = 0;
+let end = S - 1;
+let sum = 0;
+let answer = Number.NEGATIVE_INFINITY;
+
+for(let i = 0; i < S; i++){
+    sum += arr[i];
+}
+
+while(st <= end){
+    if(end === N)   break;
+    answer = Math.max(sum, answer);
+    sum -= arr[st];
+    st++;
+    end++;
+    sum += arr[end];
+}
+
+console.log(answer);
