@@ -1,0 +1,54 @@
+const fs = require("fs");
+const filePath = process.platform === "linux" ? "/dev/stdin" : "input.txt";
+let input = fs.readFileSync(filePath).toString().trim().split("\n");
+
+const N = parseInt(input.shift());
+let arr = [];
+let visited = [];
+let queue = [];
+let dPos = [[0,1], [0, -1], [1,0], [-1,0]];
+let max = Number.NEGATIVE_INFINITY;
+let min = Number.POSITIVE_INFINITY;
+let answer = Number.NEGATIVE_INFINITY;
+
+for(let i = 0; i < N; i++){
+    arr.push(input[i].split(' ').map(Number));
+    visited.push(new Array(N).fill(0));
+    max = Math.max(max, ...arr[i]);
+    min = Math.min(min, ...arr[i]);
+}
+
+let cnt = 0;
+function DFS(x,y,num){
+
+        for(let i = 0; i < 4; i++){
+            let nx = x + dPos[i][0];
+            let ny = y + dPos[i][1];
+            
+            if(nx < 0 || nx >= N || ny < 0 || ny >= N)   continue;
+            if(!visited[nx][ny] && arr[nx][ny] > num){
+                visited[nx][ny] = 1;
+                DFS(nx,ny,num);
+            }
+        }
+}
+
+for(let i = min - 1; i < max; i++){
+    let cnt = 0;
+    for(let j = 0; j < N; j++){
+        for(let k = 0; k < N; k++){
+            if(!visited[j][k] && arr[j][k] > i){
+                visited[j][k] = 1;
+                DFS(j,k,i);
+                cnt++;
+            }
+        }
+    }
+    answer = Math.max(answer,cnt);
+    for(let l = 0; l < visited.length; l++){
+        visited[l].fill(0);
+    }
+}
+
+
+console.log(answer);
