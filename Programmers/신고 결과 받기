@@ -1,0 +1,34 @@
+function solution(id_list, report, k) {
+    var answer = [];
+    const map = new Map();
+    const graph = [];
+    for(let i = 0; i < id_list.length; i++){
+        map.set(id_list[i], i);
+        graph.push(new Array(id_list.length).fill(0));
+        answer.push(0);
+    }
+    
+    for(let i = 0; i < report.length; i++){
+        const [from, to] = report[i].split(' ').map((rep) => map.get(rep));
+        if(!graph[from][to]){
+            graph[from][to] = 1;
+        }
+    }
+    for(let i = 0; i < id_list.length; i++){
+        let reportCnt = 0;
+        for(let j = 0; j < id_list.length; j++){
+            if(graph[j][i]){
+                reportCnt++;
+            }
+        }
+        if(reportCnt >= k){
+            for(let j = 0; j < id_list.length; j++){
+                if(graph[j][i]){
+                    answer[j]++;
+                }
+            }
+        }
+    }
+
+    return answer;
+}
