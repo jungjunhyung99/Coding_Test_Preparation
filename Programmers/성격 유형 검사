@@ -1,0 +1,39 @@
+function solution(survey, choices) {
+    var answer = [];
+    const map = new Map();
+    for(let i = 0; i < survey.length; i++){
+        const [no, yes] = survey[i].split('');
+        const score = Math.abs(4 - choices[i]);
+        
+        if(choices[i] < 4){
+            map.set(no, map.get(no) + score || score);
+        }
+        else if(choices[i] > 4){
+            map.set(yes, map.get(yes) + score || score)
+        }
+        else    continue;
+    }
+    
+    const T = map.get('T') || 0;
+    const R = map.get('R') || 0;
+    const A = map.get('A') || 0;
+    const N = map.get('N') || 0;
+    const C = map.get('C') || 0;
+    const F = map.get('F') || 0;
+    const J = map.get('J') || 0;
+    const M = map.get('M') || 0;
+    
+    
+    if(R < T)   answer.push('T');
+    else    answer.push('R');
+    if(C < F)   answer.push('F');
+    else    answer.push('C');
+    if(J < M)   answer.push('M');
+    else    answer.push('J');
+    if(A < N)   answer.push('N');
+    else    answer.push('A');
+    
+    answer = answer.join('')
+    
+    return answer;
+}
