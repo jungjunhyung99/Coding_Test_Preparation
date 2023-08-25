@@ -1,0 +1,16 @@
+function solution(progresses, speeds) {
+    var answer = [];
+    while(progresses.length){
+        let cnt = 0;
+        progresses = progresses.map((item,idx) => item + speeds[idx]);
+
+        while(progresses[0] >= 100){
+            cnt++;
+            progresses.shift();
+            speeds.shift();
+        }
+
+        if(cnt) answer.push(cnt);
+    }
+    return answer;
+}
