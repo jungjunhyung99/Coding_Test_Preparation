@@ -1,0 +1,13 @@
+function solution(prices) {
+    let answer = new Array(prices.length).fill(0);
+    let index = [];
+    for(let i = 0; i < prices.length; i++){
+        while(index.length && prices[index[index.length - 1]] > prices[i]){
+            let idx = index.pop()
+            answer[idx] = i - idx;
+        }
+        index.push(i);
+    }
+    index.map((idx) => answer[idx] = prices.length - idx - 1);
+  return answer;
+}
