@@ -1,0 +1,35 @@
+function solution(maps) {
+    var answer = 0;
+    let queue = [];
+    let visited = [];
+    
+    for(let i = 0; i < maps.length; i++){
+        visited.push(new Array(maps[0].length).fill(-1));
+    }
+    
+    function bfs(){
+        let dx = [0,0,1,-1];
+        let dy = [1,-1,0,0];
+    
+        while(queue.length){
+            let [x, y] = queue.shift();
+            for(let i = 0; i < 4; i++){
+                let nx = x + dx[i];
+                let ny = y + dy[i];
+                
+                if(nx < 0 || nx >= maps.length || ny < 0 || ny >= maps[0].length)   continue;
+                if(maps[nx][ny] === 1 && visited[nx][ny] === -1){
+                    visited[nx][ny] = visited[x][y] + 1;
+                    queue.push([nx,ny]);
+                }
+            }
+        }    
+    }
+    
+    queue.push([0,0]);
+    visited[0][0] = 1;
+    bfs();
+    
+    return visited[maps.length - 1][maps[0].length - 1];
+}
+
