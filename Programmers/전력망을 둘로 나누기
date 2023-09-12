@@ -1,0 +1,36 @@
+function solution(n, wires) {
+    let min = 100;
+    let edge = {};
+    wires.map((wire) => {
+        const[from, to] = wire;
+        if(!edge[from]) edge[from] = [];
+        if(!edge[to])   edge[to] = [];
+        edge[from].push(to);
+        edge[to].push(from);
+    })
+    
+    
+    function dfs(root, exception){
+        let cnt = 0;
+        const queue = [root];
+        const visited = [];
+        visited[root] = 1;
+        while(queue.length){
+            let next = queue.shift();
+            edge[next].map((node) => {
+                if(node !== exception && !visited[node]){
+                    queue.push(node);
+                    visited[node] = 1;
+                }
+            })
+            cnt++;
+        }
+        return cnt;
+    }
+    wires.map((wire) => {
+        const [from, to] = wire;
+        const temp = Math.abs(dfs(from, to) - dfs(to, from));
+        min = min > temp ? temp : min;
+        })
+    return min;
+}
