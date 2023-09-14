@@ -1,0 +1,48 @@
+function solution(places) {
+    var answer = [];
+    let queue = [];
+    let dx = [0,0,1,-1];
+    let dy = [1,-1,0,0];        
+    function bfs(visited){
+        while(queue.length){
+            const [z,x,y,depth] = queue.shift();
+            if(depth === 3) return true;
+            for(let i = 0; i < 4; i++){
+                let nx = x + dx[i];
+                let ny = y + dy[i];
+                
+                if(nx >= 0 && nx < 5 && ny >= 0 && ny < 5){
+                    if(places[z][nx][ny] === 'P' && visited[nx][ny] === 0){
+                        if(depth === 1) return false;
+                        if(places[z][x][y] === 'O') return false;
+                    }
+                    else if(places[z][nx][ny] !== 'P' && visited[nx][ny] === 0){
+                        visited[nx][ny] = 1
+                        queue.push([z,nx,ny,depth + 1]);
+                    }
+                }
+            }
+        }
+        return true;
+    }
+    
+    
+    for(let i = 0; i < 5; i++){ // 대기실 개수
+        let tf = true;
+        let visited = Array.from(Array(5), () => new Array(5).fill(0));
+        for(let j = 0; j < 5; j++){ // 대기실 세로
+            for(let k = 0; k < 5; k++){ // 대기실 가로
+                if(places[i][j][k] === 'P'){
+                    queue = [];
+                    queue.push([i,j,k,1]);
+                    visited[j][k] = 1;
+                    tf = bfs(visited) ? true : false;
+                    if(!tf) break;
+                }
+            }
+            if(!tf) break;
+        }
+        answer.push(tf ? 1 : 0);
+    }
+    return answer;
+}
