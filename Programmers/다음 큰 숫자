@@ -1,0 +1,20 @@
+function solution(n) {
+    var answer = 0;
+    let copy = n;
+    
+    function findBinary(num) {
+        let cnt = 0;
+        while(num){
+            if(num % 2) cnt++;
+            num = Math.floor(num / 2);
+        }
+        return cnt;
+    }
+    
+    let first = findBinary(n)
+    for(let i = 1; ; i++){
+        if(first === findBinary(copy + i)){
+            return copy + i;
+        }
+    }
+}
