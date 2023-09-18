@@ -1,0 +1,36 @@
+function solution(begin, target, words) {
+    var answer = 0;
+    let queue = [];
+    let visited = new Array(words.length).fill(0);
+    
+    function check(word,depth){
+        let cnt;
+        let tf = false;
+        for(let i = 0; i < words.length; i++){
+            cnt = 0;
+            for(let j = 0; j < word.length; j++){
+                if(!visited[i] && word[j] !== words[i][j]){
+                    cnt++;
+                }   
+            }
+            if(cnt === 1){
+                queue.push([words[i], depth + 1]);
+                visited[i] = 1;
+                tf = true;
+            }
+        }
+        return tf ? 1 : 0;
+    }
+    
+    function bfs(){
+        while(queue.length){
+            let [word, depth] = queue.shift();
+            if(word === target) return depth;
+            check(word,depth);
+        }
+        return 0;
+    }
+    
+    queue.push([begin, 0]);
+    return bfs();
+}
