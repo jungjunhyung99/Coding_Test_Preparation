@@ -1,0 +1,21 @@
+function solution(participant, completion) {
+    var answer = '';
+    const map = new Map();
+    
+    participant.forEach((person) => {
+        map.set(person, map.get(person) ? map.get(person) + 1 : 1);
+    })
+    
+    completion.forEach((person) => {
+        if(map.get(person) === 1){
+            map.delete(person);
+        }
+        else{
+            map.set(person, map.get(person) - 1);
+        }
+    })
+    
+    for(let key of map.keys()){
+        return key;
+    }
+}
