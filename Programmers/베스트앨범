@@ -1,0 +1,25 @@
+function solution(genres, plays) {
+    const obj = {};
+    let answer = [];
+    let arr = [];
+    genres.map((genre,idx) => {
+        if(obj[genre]){
+            obj[genre].push([idx, plays[idx]]);
+            obj[genre][0] += plays[idx];
+        }
+        else{
+            obj[genre] = [plays[idx],[idx, plays[idx]]];
+        }
+    })
+    for(let key in obj){
+        arr.push([obj[key][0],...obj[key].slice(1).sort((a,b) => b[1] - a[1])]);
+        arr.sort((a,b) => b[0] - a[0]);
+    }
+    
+    for(let key in Object.keys(obj)){
+        arr[key].slice(1,3).map((item) => answer.push(item[0]));
+    }
+    console.log(arr);
+    return answer;
+    
+}
