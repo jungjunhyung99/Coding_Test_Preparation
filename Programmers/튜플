@@ -1,0 +1,16 @@
+function solution(s) {
+    var answer = [];
+    const map = {};
+    
+    s = (s.slice(1,s.length - 2).split('},').sort((a,b) => a.length - b.length).map((item) => (item.slice(1))))
+    
+    s.forEach((item) => {
+        item.split(',').map((num, index) => {
+            if(!map[num]){
+                answer.push(Number(num));
+                map[num] = 1;
+            }
+        })
+    })
+    return answer;
+}
