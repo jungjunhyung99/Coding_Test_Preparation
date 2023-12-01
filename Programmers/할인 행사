@@ -1,0 +1,12 @@
+function solution(want, number, discount) {
+    var answer = 0;
+    for(let i = 0; i <= discount.length - 10; i++){
+        const map = new Map();
+        discount.slice(i, 10 + i).forEach((item) => map.set(item, map.has(item) ? map.get(item) + 1 : 1))
+        
+        if(want.every((item,index) => map.get(item) >= number[index]))  answer++;
+    }
+    
+    
+    return answer;
+}
