@@ -1,0 +1,62 @@
+function checkPos(x, y) {
+    if(x >= -5 && x <= 5 && y >= -5 && y <= 5){
+        return true;
+    }
+    return false;
+}
+
+function checkUnique(x, y, changableX, changableY, map){
+    if(map.has(`${[changableX, changableY, x, y]}`) || map.has(`${[x,y, changableX, changableY]}`)){
+        return false;
+    }
+    
+    return true;
+}
+
+function solution(dirs) {
+    const map = new Map();
+    let [x, y] = [0, 0];
+    
+    for(let i = 0; i < dirs.length; i++){
+        switch (dirs[i]) {
+            case 'U':
+                if(!checkPos(x, y + 1)){
+                    break;
+                }
+                if(checkUnique(x, y, x, y + 1, map)){
+                    map.set(`${[x, y, x, y + 1]}`, 1);    
+                }
+                y++;
+                break;
+            case 'D':
+                if(!checkPos(x, y - 1)){
+                    break;
+                }
+                if(checkUnique(x, y, x, y - 1, map)){
+                    map.set(`${[x, y, x, y - 1]}`, 1);   
+                }
+                y--;
+                break;
+            case 'L':
+                if(!checkPos(x - 1, y)){
+                    break;
+                }
+                if(checkUnique(x, y, x -1, y, map)){
+                    map.set(`${[x, y, x - 1, y]}`, 1);
+                }
+                x--;
+                break;
+            case 'R':
+                if(!checkPos(x + 1, y)){
+                    break;
+                }
+                if(checkUnique(x, y, x + 1, y, map)){
+                    map.set(`${[x, y, x + 1, y]}`, 1);    
+                }
+                x++;
+                break;
+        }
+    }
+    console.log(map);
+    return map.size
+}
