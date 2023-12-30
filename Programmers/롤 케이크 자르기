@@ -1,0 +1,34 @@
+function solution(topping) {
+    let answer = 0;
+    const secondMap = new Map();
+    const firstMap = new Map();
+
+    for(let i = 0; i < topping.length; i++){
+        if(secondMap.has(topping[i])){
+            secondMap.set(topping[i], secondMap.get(topping[i]) + 1);
+        }
+        else {
+            secondMap.set(topping[i], 1); 
+        }
+    }
+
+    for(let i = 0; i < topping.length; i++){
+        if(secondMap.get(topping[i]) === 1){
+            secondMap.delete(topping[i]);
+        }
+        else{
+            secondMap.set(topping[i], secondMap.get(topping[i]) - 1);
+        }
+
+        if(firstMap.has(topping[i])) {
+            firstMap.set(topping[i], firstMap.get(topping[i]) + 1)
+        }
+        else {
+            firstMap.set(topping[i], 1);
+        }
+
+        if(firstMap.size === secondMap.size)    answer++;
+    }
+
+    return answer;
+}
