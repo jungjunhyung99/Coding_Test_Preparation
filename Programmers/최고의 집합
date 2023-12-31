@@ -1,0 +1,15 @@
+function solution(n, s) {
+    var answer = [];
+    if(s < n){
+        return [-1];
+    }   
+    
+    while(s){
+        const ele = Math.floor(s / n);
+        answer.push(ele);
+        n--;
+        s -= ele;
+    }
+    
+    return answer;
+}
