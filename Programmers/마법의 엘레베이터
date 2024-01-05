@@ -1,0 +1,21 @@
+function solution(storey) {
+    var answer = 0;
+    const numbers = String(storey).split("").map(a => Number(a));
+    
+    for(let i = numbers.length - 1; i >= 0; i--){
+        if(numbers[i] > 5) {
+            answer += 10 - numbers[i];
+            if(i === 0) {
+                answer++;
+            }
+            numbers[i - 1]++; 
+        }
+        else if(numbers[i] === 5 && numbers[i - 1] >= 5 && i > 0) {
+            answer += 5;
+            numbers[i - 1]++;
+        }
+        else answer += numbers[i];
+    }
+    
+    return answer;
+}
