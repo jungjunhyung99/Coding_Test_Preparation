@@ -1,0 +1,28 @@
+function solution(skill, skill_trees) {
+    var answer = 0;
+    const arr = new Array(skill.length).fill(0);
+    
+    
+    for(let i = 0; i < skill_trees.length; i++) {
+        arr.fill(0);
+        for(let j = 0; j < skill_trees[i].length; j++) {
+            const idx = skill.indexOf(skill_trees[i][j]);
+            let tf = false;
+            if(idx !== -1) {
+                arr[idx] = 1;
+                for(let k = 0; k <= idx; k++) {
+                    if(arr[k] === 0) {
+                        tf = true;
+                        answer++;
+                        break;
+                    }
+                }
+            }
+            if (tf) break;
+        }
+        
+            console.log(arr);
+    }
+    
+    return skill_trees.length - answer;
+}
