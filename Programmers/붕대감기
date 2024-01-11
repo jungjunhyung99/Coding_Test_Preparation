@@ -1,0 +1,28 @@
+function solution(bandage, health, attacks) {
+    const [allTime, perHp, bonusHp] = bandage; 
+    let series = 0;
+    let time = 0;
+    const max = health;
+    
+    while(attacks.length) {
+        console.log(health);
+        const [damagedTime, damage] = attacks.shift();
+        health = (health + (damagedTime - time - 1) * perHp) > max ? max : health + (damagedTime - time - 1) * perHp;
+        
+        if(damagedTime - time - 1 >= allTime){
+            health = health + Math.floor((damagedTime - time - 1) / allTime) * bonusHp > max ? max : health + Math.floor((damagedTime - time - 1) / allTime) * bonusHp;
+        }
+        
+        health -= damage;
+        if(health <= 0) {
+            return -1;
+        }
+        
+        time = damagedTime;
+        
+        
+        
+    }
+    
+    return health;
+}
