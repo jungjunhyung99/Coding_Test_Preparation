@@ -1,0 +1,53 @@
+function solution(s) {
+    let wrong = 0;
+    s = s.split('');
+    let st = [];
+    
+    for(let j = 0; j < s.length; j++) {
+        st = [];
+        let tf = false;
+        for(let i = 0; i < s.length; i++) {
+            if(s[i] !== ')' && s[i] !== ']' && s[i] !== '}') {
+                st.push(s[i]);
+            }
+
+            switch(s[i]) {
+                case ')':
+                    if(st[st.length - 1] !== '('){
+                        tf = true;
+                    }
+                    else{
+                        st.pop();
+                    }
+                    break;
+                case '}':
+                    if(st[st.length -1] !== '{'){
+                        tf = true;
+                    }
+                    else{
+                        st.pop();
+                    }
+                    
+                    break;
+                case ']':
+                    if(st[st.length - 1] !== '[') {
+                        tf = true;
+                    }
+                    else{
+                        st.pop();
+                    }
+                    break;
+            }
+            
+            if(tf) {
+                break;
+            }
+    }
+            if(tf || st.length) {
+                wrong++;
+            }
+            s.push(s.shift());
+    
+    }
+    return s.length - wrong;
+}
