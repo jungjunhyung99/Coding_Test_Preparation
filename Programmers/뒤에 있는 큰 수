@@ -1,0 +1,27 @@
+function solution(numbers) {
+    const answer = [];
+    // 스택 사용하라고 했던 것 같아!!!!!!!!!!
+    let st = [];
+    
+    while(numbers.length) {
+        if(!st.length) {
+            answer.push(-1);
+            st.push(numbers.pop());
+            continue;
+        }
+        else{
+            if(st[st.length - 1] > numbers[numbers.length - 1]) {
+                answer.push(st[st.length - 1]);
+                
+                st.push(numbers.pop());
+            }
+            else{
+                st.pop();
+            }
+        }
+    }
+    
+    
+    
+    return answer.reverse();
+}
