@@ -1,0 +1,43 @@
+function solution(str1, str2) {
+    var answer = 0;
+    const regex = /^[A-Za-z]+$/
+    const obj1 = {};
+    const obj2 = {};
+    let max = 0;
+    let min = 0;
+    
+    str1 = str1.toLowerCase();
+    str2 = str2.toLowerCase();
+    
+    for(let i = 0; i < str1.length; i++) {
+        const sliced1 = str1.slice(i, i + 2);
+        if(regex.test(sliced1)) {
+            obj1[sliced1] = (obj1[sliced1] ?? 0) + 1;
+        }
+    }
+    
+    for(let i = 0; i < str2.length; i++) {
+        const sliced2 = str2.slice(i, i + 2);
+        if(regex.test(sliced2)) {
+            obj2[sliced2] = (obj2[sliced2] ?? 0) + 1;
+        }
+    }
+    
+    Object.keys(obj1).forEach((key) => {
+        if(obj2[key]) {
+            max = max + Math.max(obj2[key], obj1[key]);
+            min = min + Math.min(obj2[key], obj1[key]);
+            console.log(key);
+            delete key;
+        }
+        else{
+            max += obj1[key];
+        }
+    })
+    
+    Object.values(obj2).forEach((rest) => max += rest);
+    
+    console.log(max, min, obj1, obj2);
+    
+    return Math.floor((min/max) * 65536) ;
+}
