@@ -1,0 +1,26 @@
+function solution(word) {
+    let answer = 0;
+    let partion = '';
+    let real = 0;
+    const alpha = ['A', 'E', 'I', 'O', 'U'];
+    
+    function dfs() {
+        if(partion === word) {
+            real = answer;    
+        }
+        if(partion.length === 5) {
+            return;
+        }
+        
+        for(let i = 0; i < alpha.length; i++) {
+            partion += alpha[i];
+            answer++;
+            dfs();
+            partion = partion.split('')
+            partion.pop();
+            partion = partion.join('');
+        }
+    }
+    dfs();
+    return real;
+}
