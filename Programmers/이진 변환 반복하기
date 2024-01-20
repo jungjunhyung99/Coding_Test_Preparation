@@ -1,0 +1,24 @@
+function solution(s) {
+
+    let obj = {};
+    let time = 0;
+    let zero = 0;
+
+    while(1){
+        obj = {};
+        for(let i = 0; i < s.length; i++) {
+            obj[s[i]] = obj[s[i]] ? obj[s[i]] + 1 : 1;
+        }
+
+        zero += obj['0'] ?? 0;
+        s = (obj['1'].toString(2));
+        time++;
+
+        if(obj['1'] && obj['1'] === 1){
+            break;
+        }
+    }
+
+
+    return [time, zero];
+}
