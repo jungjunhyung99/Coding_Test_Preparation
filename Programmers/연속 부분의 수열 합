@@ -1,0 +1,18 @@
+function solution(elements) {
+    var answer = 0;
+    const set = new Set();
+    const len = elements.length;
+
+    for(let i = 0; i < len; i++) {
+        elements.push(elements[i]);
+    }
+
+    console.log(elements);
+
+    for(let i = 1; i <= elements.length / 2; i++) {
+        for(let j = 0; j < elements.length; j++) {
+            set.add(elements.slice(j, j + i).reduce((cur, acc) => cur += acc));
+        }
+    }
+    return set.size;
+}
