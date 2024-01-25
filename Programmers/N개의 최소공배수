@@ -1,0 +1,8 @@
+function getMax(a, b) {
+  if (b === 0) return a;
+  return getMax(b, a % b);
+}
+
+function solution(arr) {
+  return arr.reduce((acc, cur) => (acc * cur) / getMax(acc, cur));
+}
