@@ -1,0 +1,25 @@
+const sol = (arr, m) => {
+  const answer = [];
+  const visited = new Array(arr.length).fill(0);
+  let tmp = [];
+
+  const dfs = (L) => {
+    if (m === tmp.length) {
+      answer.push(tmp.join(" "));
+    } else {
+      for (let i = 0; i < arr.length; i++) {
+        if (!visited[i]) {
+          visited[i] = 1;
+          tmp.push(arr[i]);
+          dfs(L + 1);
+          tmp.pop();
+          visited[i] = 0;
+        }
+      }
+    }
+  };
+  dfs(0);
+  return answer;
+};
+
+console.log(sol([9, 8, 7, 1], 2).sort());
