@@ -1,0 +1,40 @@
+const fs = require("fs");
+const filePath = process.platform === "linux" ? "/dev/stdin" : "input.txt";
+let input = fs.readFileSync(filePath).toString().trim().split("\n");
+
+const len = Number(input.shift());
+
+const dx = [-2, -1, -2, -1, 1, 2, 1, 2];
+const dy = [1, 2, -1, -2, 2, 1, -2, -1];
+
+function bfs(startX, startY, endX, endY, visited, size) {
+  const arr = [];
+  arr.push([startX, startY]);
+  while (arr.length) {
+    let [x, y] = arr.shift();
+    if (x === endX && y === endY) {
+      return visited[x][y] + 1;
+    }
+
+    for (let i = 0; i < 8; i++) {
+      const nx = x + dx[i];
+      const ny = y + dy[i];
+
+      if (nx >= 0 && nx < size && ny >= 0 && ny < size) {
+        if (!visited[nx][ny]) {
+          arr.push([nx, ny]);
+          visited[nx][ny] = visited[x][y] + 1;
+        }
+      }
+    }
+  }
+}
+
+for (let i = 0; i < len; i++) {
+  const size = Number(input.shift());
+  const [startX, startY] = input.shift().split(" ").map(Number);
+  const [endX, endY] = input.shift().split(" ").map(Number);
+  let visited = Array.from(Array(300), () => Array(300).fill(0));
+  const answer = bfs(startX, startY, endX, endY, visited, size);
+  console.log(answer - 1);
+}
