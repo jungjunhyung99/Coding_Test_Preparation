@@ -1,0 +1,36 @@
+const fs = require("fs");
+const filePath = process.platform === "linux" ? "/dev/stdin" : "input.txt";
+let input = fs.readFileSync(filePath).toString().trim().split("\n");
+
+const [users, relation] = input.shift().split(" ").map(Number);
+const answer = [];
+
+const map = Array.from(Array(users + 1), () => Array(users + 1).fill(0));
+
+for (let i = 0; i < relation; i++) {
+  const [st, end] = input[i].split(" ").map(Number);
+  map[st][end] = 1;
+  map[end][st] = 1;
+}
+
+for (let i = 1; i <= users; i++) {
+  let visited = new Array(users + 1).fill(-1);
+  const arr = [];
+  arr.push(i);
+  visited[i] = 0;
+
+  while (arr.length) {
+    const next = arr.shift();
+
+    for (let j = 1; j <= users; j++) {
+      if (map[next][j] && visited[j] === -1) {
+        visited[j] = visited[next] + 1;
+        arr.push(j);
+      }
+    }
+  }
+  answer.push(visited.slice(1).reduce((cur, acc) => (cur += acc), 0));
+}
+
+const idx = answer.indexOf(Math.min(...answer));
+console.log(idx + 1);
