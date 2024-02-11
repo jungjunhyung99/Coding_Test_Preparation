@@ -1,0 +1,34 @@
+function solution(gems) {
+    const gemTypes = new Set(gems);
+    const gemCount = gemTypes.size;
+    const gemMap = new Map();
+    let minStart = 0;
+    let minLength = Infinity;
+    let start = 0;
+
+    for (let end = 0; end < gems.length; end++) {
+        const gem = gems[end];
+        if (!gemMap.has(gem)) {
+            gemMap.set(gem, 1);
+        } else {
+            gemMap.set(gem, gemMap.get(gem) + 1);
+        }
+
+        while (gemMap.size === gemCount) {
+            if (end - start < minLength) {
+                minLength = end - start;
+                minStart = start;
+            }
+
+            const startGem = gems[start];
+            gemMap.set(startGem, gemMap.get(startGem) - 1);
+            if (gemMap.get(startGem) === 0) {
+                gemMap.delete(startGem);
+            }
+
+            start++;
+        }
+    }
+
+    return [minStart + 1, minStart + minLength + 1];
+}
