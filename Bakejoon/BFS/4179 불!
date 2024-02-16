@@ -1,73 +1,112 @@
+class Queue {
+  constructor() {
+    this.data = [];
+    this.head = 0;
+    this.tail = 0;
+  }
+
+  push(item) {
+    this.data[this.tail++] = item;
+  }
+
+  pop() {
+    this.head++;
+    return this.data[this.head - 1];
+  }
+
+  front() {
+    return this.data[this.head];
+  }
+
+  rear() {
+    return this.data[this.tail - 1];
+  }
+
+  isEmpty() {
+    return this.head === this.tail;
+  }
+
+  size() {
+    return Math.abs(this.head - this.tail);
+  }
+}
+
 const fs = require("fs");
 const filePath = process.platform === "linux" ? "/dev/stdin" : "input.txt";
 let input = fs.readFileSync(filePath).toString().trim().split("\n");
-
-
-const [R, C] = input.shift().split(" ").map(Number);
-let fire = [];
-let person = [];
-let f_queue = [];
-let p_queue = [];
-let dx = [-1, 1, 0, 0];
-let dy = [0, 0, 1, -1];
-
-for(let i = 0; i < R; i++){
-    fire.push(new Array(C).fill(0));
-    person.push(new Array(C).fill(0));
-}
-
-for(let i = 0; i < R; i++){
-    let idx = input[i].indexOf('J');
-    let pos = 0;
-
-    if(idx !== -1){
-        person[i][idx] = 1;
-        p_queue.push([i,idx]);
+const [R, C] = input[0].split(" ").map(Number);
+const fire = new Queue();
+const jihun = new Queue();
+const map = Array.from({ length: R }, () => Array(C));
+for (let i = 1; i <= R; i++) {
+  const temp = input[i].split("");
+  for (let j = 0; j < C; j++) {
+    if (temp[j] === "J") {
+      jihun.push([i - 1, j, 1]);
+      map[i - 1][j] = 0;
+    } else if (temp[j] === "F") {
+      fire.push([i - 1, j]);
+      map[i - 1][j] = 1;
+    } else if (temp[j] === "#") {
+      map[i - 1][j] = -1;
+    } else {
+      map[i - 1][j] = 0;
     }
+  }
+}
 
-    while(1){
-        let idx = input[i].indexOf('F', pos);
-        if(idx === -1)  break;
-        fire[i][idx] = 1;
-        f_queue.push([i,idx]);
-        pos = idx + 1;
+const dx = [1, -1, 0, 0];
+const dy = [0, 0, 1, -1];
+
+fireBfs();
+jihunBfs();
+
+function fireBfs() {
+  let visited = Array.from({ length: R }, () => Array(C).fill(false));
+  for (const [x, y] of fire.data) {
+    visited[x][y] = 1;
+  }
+
+  while (!fire.isEmpty()) {
+    const [x, y] = fire.front();
+    fire.pop();
+
+    for (let i = 0; i < 4; i++) {
+      const nx = x + dx[i];
+      const ny = y + dy[i];
+
+      if (nx < 0 || ny < 0 || nx >= R || ny >= C) continue;
+      if (map[nx][ny] !== 0 || visited[nx][ny]) continue;
+
+      map[nx][ny] = map[x][y] + 1;
+      visited[nx][ny] = 1;
+      fire.push([nx, ny]);
     }
+  }
 }
+function jihunBfs() {
+  let visited = Array.from({ length: R }, () => Array(C).fill(false));
+  const [x, y] = jihun.front();
 
-function BFS(){
-    while(f_queue.length){
-    let [x, y] = f_queue.shift();
-    for(let i = 0; i < 4; i++){
-        let nx = x + dx[i];
-        let ny = y + dy[i];
+  visited[x][y] = 1;
 
-        if(nx < 0 || nx >= R || ny < 0 || ny >= C)  continue;
-        if(fire[nx][ny] > 1 || input[nx][ny] === '#')   continue;
+  while (!jihun.isEmpty()) {
+    const [x, y, cnt] = jihun.pop();
+    for (let i = 0; i < 4; i++) {
+      const nx = x + dx[i];
+      const ny = y + dy[i];
 
-        fire[nx][ny] = fire[x][y] + 1;
-        f_queue.push([nx, ny]);
+      if (nx < 0 || ny < 0 || nx >= R || ny >= C) {
+        console.log(cnt);
+        return;
+      }
+
+      if (map[nx][ny] !== 0 && map[nx][ny] <= cnt + 1) continue;
+      if (visited[nx][ny]) continue;
+      if (map[nx][ny] === -1) continue;
+      visited[nx][ny] = true;
+      jihun.push([nx, ny, cnt + 1]);
     }
+  }
+  console.log("IMPOSSIBLE");
 }
-
-while(p_queue.length){
-    let [x, y] = p_queue.shift();
-    for(let i = 0; i < 4; i++){
-        let nx = x + dx[i];
-        let ny = y + dy[i];
-
-        if(nx === -1 || nx === R - 1 || ny === -1 || ny === C - 1){
-            console.log(person[x][y] + 1);
-            return;
-        }
-
-        if(person[nx][ny] > 0|| input[nx][ny] === '#') continue;
-        if(fire[nx][ny] !== 0 && fire[nx][ny] <= person[x][y] + 1)   continue;
-
-        person[nx][ny] = person[x][y] + 1;
-        p_queue.push([nx,ny]);
-    }
-}
-console.log("IMPOSSIBLE");
-}
-
-BFS();
