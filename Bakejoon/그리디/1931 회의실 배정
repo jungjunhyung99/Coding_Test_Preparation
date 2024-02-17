@@ -1,0 +1,23 @@
+const fs = require("fs");
+const filePath = process.platform === "linux" ? "/dev/stdin" : "input.txt";
+let input = fs.readFileSync(filePath).toString().trim().split("\n");
+
+// 입력 값 처리
+input = input
+  .slice(1)
+  .map((item) => item.replace(/\r/g, ""))
+  .map((item) => item.split(" ").map(Number));
+input = input.sort((a, b) => (a[1] === b[1] ? a[0] - b[0] : a[1] - b[1]));
+
+let deadLine = 0;
+let cnt = 0;
+
+for (let i = 0; i < input.length; i++) {
+  const [st, end] = input[i];
+  if (deadLine <= st) {
+    deadLine = end;
+    cnt++;
+  }
+}
+
+console.log(cnt);
