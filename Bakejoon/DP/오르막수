@@ -1,0 +1,20 @@
+const fs = require("fs");
+const filePath = process.platform === "linux" ? "/dev/stdin" : "input.txt";
+let input = fs.readFileSync(filePath).toString().trim().split("\n");
+
+const num = Number(input);
+
+const dp = Array.from(Array(num), () => Array(10).fill(0));
+
+for (let i = 0; i <= 9; i++) {
+  dp[0][i] = i + 1;
+}
+
+for (let i = 1; i < num; i++) {
+  dp[i] = [1];
+  for (let j = 1; j < 10; j++) {
+    dp[i][j] = (dp[i - 1][j] + dp[i][j - 1]) % 10007;
+  }
+}
+
+console.log(dp[num - 1][9]);
