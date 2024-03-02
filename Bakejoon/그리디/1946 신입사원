@@ -1,0 +1,30 @@
+const fs = require("fs");
+const filePath = process.platform === "linux" ? "/dev/stdin" : "input.txt";
+let input = fs.readFileSync(filePath).toString().trim().split("\n");
+
+const repeat = Number(input.shift());
+
+function solution(arr) {
+  let answer = 1;
+  const cnt = Number(arr.shift());
+
+  arr = arr
+    .map((item) => item.split(" ").map(Number))
+    .sort((a, b) => a[0] - b[0]);
+
+  let deadLine = arr[0][1];
+
+  for (let i = 1; i < cnt; i++) {
+    if (deadLine > arr[i][1]) {
+      answer++;
+      deadLine = arr[i][1];
+    }
+  }
+  console.log(answer);
+}
+
+for (let i = 0; i < repeat; i++) {
+  const totalPerson = Number(input[0]);
+  const spliced = input.splice(0, totalPerson + 1);
+  solution(spliced);
+}
