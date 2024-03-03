@@ -1,0 +1,93 @@
+class MaxHeap {
+  constructor() {
+    this.heap = [];
+  }
+
+  swap(a, b) {
+    const temp = this.heap[a];
+    this.heap[a] = this.heap[b];
+    this.heap[b] = temp;
+  }
+
+  size() {
+    return this.heap.length;
+  }
+
+  empty() {
+    return this.size() === 0;
+  }
+
+  push(data) {
+    this.heap.push(data);
+    let cur = this.heap.length - 1;
+    let parent = Math.floor((cur - 1) / 2);
+
+    while (cur > 0 && this.heap[parent] < data) {
+      this.swap(cur, parent);
+      cur = parent;
+      parent = Math.floor((cur - 1) / 2);
+    }
+  }
+
+  pop() {
+    if (this.heap.length === 0) {
+      return 0;
+    }
+    if (this.heap.length === 1) {
+      return this.heap.pop();
+    }
+
+    let returnValue = this.heap[0];
+    this.heap[0] = this.heap.pop();
+
+    let cur = 0;
+    let left = 1;
+    let right = 2;
+
+    while (
+      this.heap[cur] < this.heap[left] ||
+      this.heap[cur] < this.heap[right]
+    ) {
+      if (this.heap[left] < this.heap[right]) {
+        this.swap(cur, right);
+        cur = right;
+      } else {
+        this.swap(cur, left);
+        cur = left;
+      }
+
+      left = cur * 2 + 1;
+      right = cur * 2 + 2;
+    }
+
+    return returnValue;
+  }
+}
+
+const fs = require("fs");
+const filePath = process.platform === "linux" ? "/dev/stdin" : "input.txt";
+let input = fs.readFileSync(filePath).toString().trim().split("\n");
+
+const heap = new MaxHeap();
+const [N, M] = input[0].split(" ").map(Number);
+
+const jewels = input.slice(1, N + 1).map((item) => item.split(" ").map(Number));
+jewels.sort((a, b) => a[0] - b[0]);
+const bags = input.slice(N + 1).map(Number);
+bags.sort((a, b) => a - b);
+
+let j = 0;
+let sum = 0;
+
+for (let i = 0; i < M; i++) {
+  while (j < N && jewels[j][0] <= bags[i]) {
+    heap.push(jewels[j][1]);
+    j++;
+  }
+
+  if (heap.size()) {
+    sum += heap.pop();
+  }
+}
+
+console.log(sum);
