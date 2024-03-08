@@ -1,0 +1,43 @@
+function solution(stones, k) {
+    var answer = 0;
+    
+    
+    function possible(value) {
+        let cnt = 0;
+        const arr = stones.slice();
+        for(let i = 0; i < arr.length; i++) {
+            arr[i] -= value;
+            if(arr[i] <= 0) {
+                cnt++;
+            }
+            else{
+                cnt = 0;
+            }
+            
+            if(cnt === k) {
+                return false;
+            }
+        }
+        return true;
+    }
+    
+    
+    let st = 1;
+    let end = 2000000000;
+    let mid;
+    
+    
+    while(st <= end) {
+        mid = Math.floor((st + end) / 2);
+        
+        if(possible(mid)) {
+            st = mid + 1;
+        }
+        else{
+            end = mid - 1;
+        }
+        
+    }
+    
+    return st;
+}
