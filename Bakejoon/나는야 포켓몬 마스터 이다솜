@@ -1,0 +1,18 @@
+const fs = require("fs");
+const filePath = process.platform === "linux" ? "/dev/stdin" : "input.txt";
+let input = fs.readFileSync(filePath).toString().trim().split("\n");
+
+const [N, M] = input.shift().split(" ").map(Number);
+input = input.map((item) => item.replace(/\r/g, ""));
+const name = {};
+const num = {};
+
+for (let i = 0; i < N; i++) {
+  name[input[i]] = i + 1;
+  num[i + 1] = input[i];
+}
+
+for (let i = N; i < N + M; i++) {
+  if (isNaN(Number(input[i]))) console.log(name[input[i]]);
+  else console.log(num[input[i]]);
+}
