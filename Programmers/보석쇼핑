@@ -1,0 +1,17 @@
+function solution(gems) {
+    var answer = [];
+    const totalSize = new Set(gems).size;
+    const map = new Map();
+    let st = 0;
+    
+    for(let end = 0; end < gems.length; end++) {
+        map.set(gems[end], (map.get(gems[end]) ?? 0) + 1);
+        
+        while(map.size === totalSize) {
+            map.set(gems[st], map.get(gems[st]) - 1);
+            st++;
+        }
+    }
+    
+    return answer;
+}
