@@ -1,0 +1,26 @@
+function solution(cacheSize, cities) {
+    const arr = [];
+    let time = 0;
+    
+    cities = cities.map(city => city.toLowerCase());
+    
+    if(cacheSize === 0) return cities.length * 5;
+    
+    for(let i = 0; i < cities.length; i++) {
+        if(!arr.includes(cities[i])) {
+            if(arr.length === cacheSize) {
+                arr.shift();
+            }
+            arr.push(cities[i]);
+            time += 5;
+        }
+        else {
+            const idx = arr.indexOf(cities[i]);
+            arr.splice(idx, 1);
+            arr.push(cities[i]);
+            time += 1;
+        }
+    }
+    
+    return time;
+}
