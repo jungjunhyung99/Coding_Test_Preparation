@@ -1,0 +1,38 @@
+function solution(arr) {
+    const answer = [0, 0];
+    
+    const bfs = (startX, startY, len) => {
+        const firstNum = arr[startX][startY];
+        if(len === 1) {
+            answer[firstNum]++;
+            return;
+        }
+        
+        let flag = true;
+        
+        for(let i = startX; i < startX + len; i++) {
+            for(let j = startY; j < startY + len; j++) {
+                if(firstNum !== arr[i][j]) {
+                    flag = false;
+                    break;
+                }
+            }
+            if (!flag) break;
+        }
+        
+        if (flag) {
+            answer[firstNum]++;
+            return;
+        }
+        
+        const nextLen = len / 2;
+        bfs(startX, startY, nextLen);
+        bfs(startX + nextLen, startY, nextLen);
+        bfs(startX, startY + nextLen, nextLen);
+        bfs(startX + nextLen, startY + nextLen, nextLen);
+    }
+    
+    bfs(0, 0, arr.length);
+    
+    return answer;
+}
