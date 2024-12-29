@@ -1,0 +1,21 @@
+function solution(number, limit, power) {
+    const arr = [];
+    for(let i = 0; i < number; i++) arr.push(i + 1);
+    
+    const findD = (num) => {
+        let d = 0;
+        for(let i = 1; i <= Math.sqrt(num); i++) {
+            if(num % i === 0){
+                d++;
+                if(num / i !== i) d++;
+            }
+        }
+        
+        if(d > limit) return power;
+        
+        return d;
+    }
+    
+    const result = arr.map(item => findD(item)).reduce((cur, acc) => cur += acc, 0);
+    return result;
+}
