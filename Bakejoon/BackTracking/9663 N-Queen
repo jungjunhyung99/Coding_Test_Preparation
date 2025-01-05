@@ -1,0 +1,35 @@
+const fs = require("fs");
+const filePath = process.platform === "linux" ? "/dev/stdin" : "input.txt";
+let input = fs.readFileSync(filePath).toString().trim().split("\n");
+
+// let [M, N] = input.shift().split(" ").map(Number);
+const M = Number(input.shift());
+const arr = [];
+let answer = 0;
+
+const possibllityCheck = (row, col) => {
+  for (let i = 0; i < arr.length; i++) {
+    if (arr[i] === col) return false;
+    if (Math.abs(i - row) === Math.abs(arr[i] - col)) return false;
+  }
+
+  return true;
+};
+
+const dfs = (row) => {
+  if (row === M) {
+    answer++;
+    return;
+  }
+
+  for (let col = 0; col < M; col++) {
+    if (possibllityCheck(row, col)) {
+      arr.push(col);
+      dfs(row + 1);
+      arr.pop();
+    }
+  }
+};
+
+dfs(0);
+console.log(answer);
