@@ -1,0 +1,37 @@
+function solution(nums) {
+    let answer = 0;
+    const arr = [];
+
+    // 에라토스테네스의 체로 소수 판별 배열 생성
+    for (let i = 2; i <= 3000; i++) {
+        arr[i] = i;
+    }
+
+    for (let i = 2; i <= 3000; i++) {
+        if (arr[i] === 0) continue;
+
+        for (let j = i + i; j <= 3000; j += i) {
+            arr[j] = 0;
+        }
+    }
+
+    const numList = [];
+    const dfs = (idx) => {
+        if (numList.length === 3) {
+            const sum = numList.reduce((acc, cur) => acc + cur, 0);
+            if (arr[sum]) {
+                answer++;
+            }
+            return;
+        }
+
+        for (let i = idx; i < nums.length; i++) {
+            numList.push(nums[i]);
+            dfs(i + 1); 
+            numList.pop();
+        }
+    };
+
+    dfs(0);
+    return answer;
+}
