@@ -1,0 +1,60 @@
+const fs = require("fs");
+const filePath = process.platform === "linux" ? "/dev/stdin" : "input.txt";
+let input = fs.readFileSync(filePath).toString().trim().split("\n");
+
+const gears = input.slice(0, 4).map((line) => line.split("").map(Number));
+const rotationCount = Number(input[4]);
+const turns = input.slice(5).map((item) => item.split(" ").map(Number));
+
+const rotate = (gear, direction) => {
+  if (direction === 1) {
+    gears[gear].unshift(gears[gear].pop()); // 시계 방향 회전
+  } else {
+    gears[gear].push(gears[gear].shift()); // 반시계 방향 회전
+  }
+};
+
+const changeGear = (startingGear, direction) => {
+  const directions = Array(4).fill(0);
+  directions[startingGear] = direction;
+
+  // 오른쪽으로 전파
+  for (let i = startingGear; i < 3; i++) {
+    if (gears[i][2] !== gears[i + 1][6]) {
+      directions[i + 1] = -directions[i]; // 반대 방향 전파
+    } else {
+      break;
+    }
+  }
+
+  // 왼쪽으로 전파
+  for (let i = startingGear; i > 0; i--) {
+    if (gears[i][6] !== gears[i - 1][2]) {
+      directions[i - 1] = -directions[i]; // 반대 방향 전파
+    } else {
+      break;
+    }
+  }
+
+  // 각 톱니바퀴를 실제로 회전
+  for (let i = 0; i < 4; i++) {
+    if (directions[i] !== 0) {
+      rotate(i, directions[i]);
+    }
+  }
+};
+
+for (let i = 0; i < rotationCount; i++) {
+  const [gear, direction] = turns[i];
+  changeGear(gear - 1, direction);
+}
+
+// 점수 계산
+let sum = 0;
+for (let i = 0; i < 4; i++) {
+  if (gears[i][0] === 1) {
+    sum += Math.pow(2, i);
+  }
+}
+
+console.log(sum);
