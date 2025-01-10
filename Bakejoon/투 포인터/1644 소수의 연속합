@@ -1,0 +1,46 @@
+const fs = require("fs");
+const filePath = process.platform === "linux" ? "/dev/stdin" : "input.txt";
+let input = fs.readFileSync(filePath).toString().trim().split("\n");
+
+const nums = [];
+const num = Number(input.shift());
+
+for (let i = 2; i <= num; i++) {
+  nums[i] = i;
+}
+
+for (let i = 2; i <= num; i++) {
+  if (nums[i] === 0) continue;
+
+  for (let j = i + i; j <= num; j += i) {
+    nums[j] = 0;
+  }
+}
+
+const decimals = [];
+
+for (let i = 2; i <= num; i++) {
+  if (nums[i]) decimals.push(nums[i]);
+}
+
+let st = 0;
+let end = 0;
+let sum = decimals[st];
+let answer = 0;
+
+while (st < decimals.length && end !== decimals.length) {
+  if (sum === num) {
+    sum = decimals[++st];
+    end = st;
+    answer++;
+    continue;
+  }
+
+  if (num < sum) {
+    sum -= decimals[st++];
+  } else {
+    sum += decimals[++end];
+  }
+}
+
+console.log(answer);
