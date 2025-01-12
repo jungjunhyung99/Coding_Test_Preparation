@@ -1,0 +1,52 @@
+function solution(users, emoticons) {
+    const discount = [0.1, 0.2, 0.3, 0.4];
+    let max = [0, 0];
+    
+    const discountArr = [];
+    
+    const getResult = (discountArr) => {
+        let plusUsers = 0;
+        let cost = 0;
+        
+        users.forEach((user) => {
+            const [usersPercent, usersCost] = user;
+            const allCost = discountArr.reduce((acc, cur, index) => {
+                if(cur * 100 >= usersPercent) {
+                    return acc + ((1 - cur) * emoticons[index]);
+                }
+                return acc;
+            }, 0);
+            
+            if(allCost >= usersCost) {
+                plusUsers++;
+            }
+            else {
+                cost += allCost;
+            }
+            
+        });
+        
+        if(max[0] < plusUsers) {
+            max = [plusUsers, cost];
+        } else if(max[0] === plusUsers && max[1] <= cost) {
+            max = [plusUsers, cost];
+        }
+    };
+    
+    const dfs = () => {
+        if(discountArr.length === emoticons.length) {
+            const [buyer, cost] = max;
+            getResult(discountArr);
+            return;
+        }
+        for(let i = 0; i < discount.length; i++) {
+            discountArr.push(discount[i]);
+            dfs();
+            discountArr.pop();
+        }
+    }
+    
+    dfs();
+    
+    return(max);
+}
