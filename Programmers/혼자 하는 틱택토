@@ -1,0 +1,42 @@
+function solution(board) {
+    const getNum = () => {
+        let x = 0;
+        let o = 0;
+        board.forEach(row => row.split('').forEach(ch => ch === 'O' ? o++ : ch === 'X' ? x++ : null));
+        
+        return [o, x];
+    }
+    
+    const isDone = () => {
+        const cases = [
+            [[0, 0], [0, 1], [0, 2]],
+            [[1, 0], [1, 1], [1, 2]],
+            [[2, 0], [2, 1], [2, 2]],
+            [[0, 0], [1, 0], [2, 0]],
+            [[0, 1], [1, 1], [2, 1]],
+            [[0, 2], [1, 2], [2, 2]],
+            [[0, 0], [1, 1], [2, 2]],
+            [[0, 2], [1, 1], [2, 0]],
+        ];
+        
+        const oWinCase = cases.map(item => item.every(([x, y]) => board[x][y] === 'O'))
+        const xWinCase = cases.map(item => item.every(([x, y]) => board[x][y] === 'X'))
+        
+        return [oWinCase.includes(true), xWinCase.includes(true)]
+    }
+    
+    const [o, x] = getNum();
+    const [oWinCase, xWinCase] = isDone();
+    console.log(oWinCase, xWinCase);
+    if(oWinCase && xWinCase) {
+        return 0;
+    }
+    else if(oWinCase) {
+        if(o - 1 !== x) return 0;
+    } else if(xWinCase) {
+        if(o !== x) return 0;
+    }
+    if(o !== x && o - 1 !== x) return 0;
+    
+    return 1;
+}
