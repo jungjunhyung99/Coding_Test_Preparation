@@ -1,0 +1,36 @@
+function solution(cards) {
+    let max = 0;
+    const visited = new Array(cards.length + 1).fill(0);
+    cards.unshift(0);
+    
+    const dfs = (nextNum, visited) => {
+        if(visited[nextNum]) {
+            return;
+        }
+        
+        
+        if(!visited[nextNum]) {
+            visited[nextNum] = 1;
+            dfs(cards[nextNum], visited);
+        }
+    }
+    
+    for(let i = 1; i < cards.length; i++) {
+        let first = 0;
+        let second = 0;
+        dfs(i, visited);
+        first = visited.reduce((acc, cur) => acc += cur, 0);
+        
+        for(let j = 1; j < cards.length; j++) {
+            const iVisited = [...visited];
+            if(iVisited[j]) continue;
+            dfs(j, iVisited);
+            second = iVisited.reduce((acc, cur) => acc += cur, 0) - first;
+            max = Math.max(max, first * second);
+        }
+        
+        visited.fill(0);
+    }
+    
+    return max;
+}
