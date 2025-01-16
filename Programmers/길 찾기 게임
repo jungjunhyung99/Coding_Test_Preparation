@@ -1,0 +1,67 @@
+function solution(nodeinfo) {
+    const preArr = [];
+    const postArr = [];
+    
+    
+    const preorder = (node) => {
+        if(node !== null) {
+            preArr.push(node.value);
+            preorder(node.left);
+            preorder(node.right);
+        }
+    }
+    
+    const postorder = (node) => {
+        if(node !== null) {
+            postorder(node.left);
+            postorder(node.right);
+            postArr.push(node.value);
+        }
+    }
+    
+    class BinaryTree {
+        constructor(value, x) {
+            this.value = value;
+            this.x = x;
+            this.left = null;
+            this.right = null;
+        }
+        
+        insert(value, x) {
+            if(this.x >= x) {
+                this.tossLeft(value, x);
+            } else {
+                this.tossRight(value, x);
+            }
+        }
+        
+        tossLeft(value, x) {
+            if(this.left) {
+                this.left.insert(value,x);
+            } else {
+                this.left = new BinaryTree(value, x);
+            }
+        }
+        
+        tossRight(value, x) {
+            if(this.right) {
+                this.right.insert(value, x);
+            } else {
+                this.right = new BinaryTree(value, x);
+            }
+        }
+    }
+    
+    
+    const nodes = nodeinfo.map((node, index) => [ index + 1, ...node]).sort((a, b) => b[2] - a[2]);
+    const root = new BinaryTree(nodes[0][0], nodes[0][1]);
+    
+    for(let i = 1; i < nodes.length; i++) {
+        root.insert(nodes[i][0], nodes[i][1]);
+    }
+    
+    preorder(root);
+    postorder(root);
+    
+    return [preArr, postArr];
+}
