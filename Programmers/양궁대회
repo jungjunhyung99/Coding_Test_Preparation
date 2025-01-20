@@ -1,0 +1,48 @@
+function solution(n, info) {
+    let max = -1;
+    const visited = new Array(11).fill(0);
+    let answer = [-1];
+    
+    const dfs = (num, idx) => {
+        if (idx === 11 || num === 0) { 
+            if (num > 0) visited[10] += num; // 남은 화살 처리
+
+            let appeachSum = 0;
+            let lionSum = 0;
+
+            for (let i = 0; i < 11; i++) {
+                if (visited[i] > info[i]) lionSum += 10 - i;
+                else if (info[i] > 0) appeachSum += 10 - i;
+            }
+
+            if (lionSum > appeachSum) {
+                const diff = lionSum - appeachSum;
+                if (diff > max || (diff === max && compareAnswers(visited, answer))) {
+                    max = diff;
+                    answer = [...visited];
+                }
+            }
+
+            if (num > 0) visited[10] -= num; // 원상복구
+            return;
+        }
+
+        if (num > info[idx]) {
+            visited[idx] = info[idx] + 1;
+            dfs(num - visited[idx], idx + 1);
+            visited[idx] = 0;
+        }
+
+        dfs(num, idx + 1); // 화살을 쏘지 않고 넘어감
+    };
+
+    const compareAnswers = (current, previous) => {
+        for (let i = 10; i >= 0; i--) {
+            if (current[i] !== previous[i]) return current[i] > previous[i];
+        }
+        return false;
+    };
+
+    dfs(n, 0);
+    return answer;
+}
