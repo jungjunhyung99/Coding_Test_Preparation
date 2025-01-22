@@ -1,0 +1,71 @@
+function binarySearch(start, end, target, weights) {
+  while (start <= end) {
+      const mid = Math.floor((start + end) / 2); // 중간 인덱스를 계산합니다.
+      if (weights[mid] === target) {
+          return mid; // 목표 값과 같다면 해당 인덱스를 반환합니다.
+      }
+      if (weights[mid] < target) {
+          start = mid + 1; // 중간 값보다 크다면 오른쪽으로 이동합니다.
+      } else {
+          end = mid - 1; // 중간 값보다 작다면 왼쪽으로 이동합니다.
+      }
+  }
+  return -1; // 목표 값이 없는 경우 -1을 반환합니다.
+}
+
+function event(n, target, weights) {
+  // 1. 무게가 target과 같은 물건이 존재하면 true를 반환
+  if (binarySearch(0, n - 1, target, weights) >= 0) {
+      return true;
+  }
+
+  let i = 0;
+  let j = n - 1;
+
+  // 2. 두 개 또는 세 개의 물건으로 target을 만들 수 있는지 확인
+  while (i < j) {
+      const weightSum = weights[i] + weights[j]; // 현재 두 물건의 무게 합
+
+      if (weightSum > target) {
+          j--; // 무게 합이 target보다 크면 큰 값을 줄입니다.
+      } else if (weightSum === target) {
+          return true; // 두 물건의 합이 target이면 true 반환
+      } else {
+          const diff = target - weightSum; // 필요한 나머지 무게를 계산
+
+          // diff가 현재 선택한 두 물건이 아니고, 배열 내에 존재한다면 true 반환
+          if (diff !== weights[i] && diff !== weights[j] &&
+              binarySearch(0, n - 1, diff, weights) >= 0) {
+              return true;
+          }
+          i++; // 무게 합이 작으므로 작은 값을 키웁니다.
+      }
+  }
+
+  return false; // 가능한 조합을 찾을 수 없는 경우 false 반환
+}
+
+// 입력을 받습니다. (Node.js 환경에서 실행한다고 가정)
+const readline = require("readline");
+const rl = readline.createInterface({
+  input: process.stdin,
+  output: process.stdout
+});
+
+rl.on("line", (line) => {
+  if (!global.n) {
+      // 첫 번째 줄: 물건 개수(N)와 목표 무게(C)
+      [global.n, global.c] = line.split(" ").map(Number);
+  } else {
+      // 두 번째 줄: 물건의 무게 리스트
+      const weights = line.split(" ").map(Number).sort((a, b) => a - b);
+
+      // 결과를 출력합니다.
+      if (event(global.n, global.c, weights)) {
+          console.log(1);
+      } else {
+          console.log(0);
+      }
+      rl.close(); // 입력 종료
+  }
+});
