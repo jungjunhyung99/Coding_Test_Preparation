@@ -1,0 +1,44 @@
+const fs = require("fs");
+const filePath = process.platform === "linux" ? "/dev/stdin" : "input.txt";
+let input = fs.readFileSync(filePath).toString().trim().split("\n");
+
+const N = Number(input.shift());
+
+const degree = Array.from(new Array(N + 1), () => []);
+const indegree = new Array(N + 1).fill(0);
+const times = [0];
+const result = new Array(N + 1).fill(0);
+
+for (let i = 1; i <= N; i++) {
+  const [time, ...rest] = input.shift().split(" ").map(Number);
+  times.push(time);
+
+  for (let j = 0; j < rest.length - 1; j++) {
+    degree[rest[j]].push(i);
+    indegree[i]++;
+  }
+}
+
+const queue = [];
+
+for (let i = 1; i < indegree.length; i++) {
+  if (indegree[i] === 0) {
+    queue.push(i);
+    result[i] = times[i];
+  }
+}
+
+while (queue.length) {
+  const num = queue.shift();
+
+  for (let i = 0; i < degree[num].length; i++) {
+    const nextNum = degree[num][i];
+    indegree[nextNum]--;
+    if (indegree[nextNum] === 0) {
+      queue.push(nextNum);
+      result[nextNum] = Math.max(result[nextNum], result[num] + times[nextNum]);
+    }
+  }
+}
+
+console.log(result.slice(1).join("\n"));
