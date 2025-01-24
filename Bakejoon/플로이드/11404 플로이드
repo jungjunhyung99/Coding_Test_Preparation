@@ -1,0 +1,32 @@
+const fs = require("fs");
+const filePath = process.platform === "linux" ? "/dev/stdin" : "input.txt";
+let input = fs.readFileSync(filePath).toString().trim().split("\n");
+
+const N = Number(input.shift());
+const M = Number(input.shift());
+const map = Array.from(new Array(N + 1), () =>
+  Array(N + 1).fill(Number.POSITIVE_INFINITY)
+);
+
+input = input.map((el) => el.split(" ").map(Number));
+
+for (let i = 1; i < map.length; i++) {
+  map[i][i] = 0;
+}
+
+for (let i = 0; i < M; i++) {
+  const [st, end, cost] = input[i];
+  map[st][end] = Math.min(cost, map[st][end]);
+}
+
+for (let k = 1; k <= N; k++) {
+  for (let i = 1; i <= N; i++) {
+    for (let j = 1; j <= N; j++) {
+      if (map[i][k] + map[k][j] < map[i][j]) {
+        map[i][j] = map[i][k] + map[k][j];
+      }
+    }
+  }
+}
+
+map.slice(1).forEach((el) => console.log(el.slice(1).join(" ")));
