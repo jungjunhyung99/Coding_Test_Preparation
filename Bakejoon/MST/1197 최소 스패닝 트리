@@ -1,0 +1,38 @@
+const fs = require("fs");
+const input = fs.readFileSync("/dev/stdin").toString().trim().split("\n");
+
+const [V, E] = input[0].split(" ").map(Number);
+const edges = input.slice(1).map(line => line.split(" ").map(Number));
+
+const parent = Array.from({ length: V + 1 }, (_, i) => i);
+
+function find(x) {
+  if (parent[x] !== x) {
+    parent[x] = find(parent[x]);
+  }
+  return parent[x];
+}
+
+function union(x, y) {
+  const rootX = find(x);
+  const rootY = find(y);
+  if (rootX !== rootY) {
+    parent[rootY] = rootX;
+  }
+}
+
+edges.sort((a, b) => a[2] - b[2]);
+
+let totalWeight = 0;
+let edgeCount = 0;
+
+for (const [u, v, w] of edges) {
+  if (find(u) !== find(v)) {
+    union(u, v);
+    totalWeight += w;
+    edgeCount++;
+    if (edgeCount === V - 1) break; // 스패닝 트리는 V-1개의 간선만 필요
+  }
+}
+
+console.log(totalWeight);
