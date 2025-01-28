@@ -1,0 +1,58 @@
+const fs = require("fs");
+const filePath = process.platform === "linux" ? "/dev/stdin" : "input.txt";
+let input = fs.readFileSync(filePath).toString().trim().split("\n");
+
+const MAX = 100000000;
+const city = Number(input[0]);
+const bus = Number(input[1]);
+const busInfos = input.slice(2).map((el) => el.replace("\r", ""));
+const graph = Array.from(new Array(city + 1), () => Array(city + 1).fill(MAX));
+const ntx = Array.from(new Array(city + 1), () => Array(city + 1).fill(null));
+
+busInfos.forEach((busInfo) => {
+  const [st, end, cost] = busInfo.split(" ").map(Number);
+  if (graph[st][end] > cost) {
+    graph[st][end] = cost;
+    ntx[st][end] = end;
+  }
+});
+
+for (let i = 1; i <= city; i++) {
+  graph[i][i] = 0;
+}
+
+for (let k = 1; k <= city; k++) {
+  for (let i = 1; i <= city; i++) {
+    for (let j = 1; j <= city; j++) {
+      if (graph[i][j] > graph[i][k] + graph[k][j]) {
+        graph[i][j] = graph[i][k] + graph[k][j];
+        ntx[i][j] = ntx[i][k];
+      }
+    }
+  }
+}
+
+for (let i = 1; i <= city; i++) {
+  const row = graph[i].slice(1).map((val) => (val === MAX ? 0 : val));
+  console.log(row.join(" "));
+}
+
+for (let i = 1; i <= city; i++) {
+  for (let j = 1; j <= city; j++) {
+    if (graph[i][j] === 0 || graph[i][j] === MAX) {
+      console.log("0");
+      continue;
+    }
+
+    const path = [];
+    let current = i;
+
+    while (current !== j) {
+      path.push(current);
+      current = ntx[current][j];
+    }
+    path.push(j);
+
+    console.log(`${path.length} ${path.join(" ")}`);
+  }
+}
