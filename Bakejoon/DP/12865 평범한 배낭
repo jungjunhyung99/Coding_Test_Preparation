@@ -1,0 +1,20 @@
+const fs = require("fs");
+const filePath = process.platform === "linux" ? "/dev/stdin" : "input.txt";
+let input = fs.readFileSync(filePath).toString().trim().split("\n");
+
+input = input.map((el) => el.split(" ").map(Number));
+
+const [N, K] = input.shift();
+const dp = Array.from({ length: N + 1 }, () => new Array(K + 1).fill(0));
+
+for (let i = 1; i <= N; i++) {
+  for (let w = 0; w <= K; w++) {
+    const [curW, curCost] = input[i - 1];
+    if (curW > w) dp[i][w] = dp[i - 1][w];
+    else {
+      dp[i][w] = Math.max(dp[i - 1][w], dp[i - 1][w - curW] + curCost);
+    }
+  }
+}
+
+console.log(dp[N][K]);
