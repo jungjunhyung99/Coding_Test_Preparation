@@ -1,0 +1,71 @@
+function solution(n, k, enemy) {
+    class MinHeap {
+      constructor() {
+        this.heap = [];
+      }
+
+      swap (firstIdx, secondIdx) {
+        const temp = this.heap[firstIdx];
+        this.heap[firstIdx] = this.heap[secondIdx];
+        this.heap[secondIdx] = temp;
+      }
+
+      push(val) {
+        this.heap.push(val);
+        let index = this.heap.length - 1;
+        let parentIndex = Math.floor((index - 1) / 2);
+
+        while(index > 0 && this.heap[index] < this.heap[parentIndex]) {
+          this.swap(index, parentIndex);
+          index = parentIndex;
+          parentIndex = Math.floor((index - 1) / 2);
+        }
+      }
+
+      pop() {
+        if (this.heap.length === 0) return;
+        if (this.heap.length === 1) return this.heap.pop();
+        
+        const top = this.heap[0];
+        this.heap[0] = this.heap.pop();
+
+        let idx = 0;
+        while(idx * 2 + 1 < this.heap.length) {
+          let leftIdx = idx * 2 + 1;
+          let rightIdx = idx * 2 + 2;
+          let next = idx;
+
+          if(this.heap[next] > this.heap[leftIdx]) {
+            next = leftIdx;
+          }
+          if(rightIdx < this.heap.length && this.heap[next] > this.heap[rightIdx]) {
+            next = rightIdx;
+          }
+          if(next === idx) {
+            break;
+          }
+
+          this.swap(idx, next);
+          idx = next;
+        }
+      return top;
+      }
+    }
+    
+    let sum = 0;
+    const heap = new MinHeap();
+    enemy.slice(0, k).forEach(el => heap.push(el));
+    
+    for(let i = k; i < enemy.length; i++) {
+        heap.push(enemy[i]);
+        
+        const min = heap.pop();
+        if(sum + min > n) {
+            return i;
+        }
+        
+        sum += min;
+    }
+    
+    return enemy.length
+}
