@@ -1,0 +1,48 @@
+function solution(relation) {
+    let answer = 0;
+    const answerCombinations = [];
+    
+    const isMinimality = (arr) => {
+        for (const comb of answerCombinations) {
+            if (comb.every(attr => arr.includes(attr))) {
+                return false;
+            }
+        }
+        return true;
+    };
+
+    const getHashLen = (arr) => {
+        const set = new Set();
+        for (let i = 0; i < relation.length; i++) {
+            let str = arr.map(idx => relation[i][idx]).join('');
+            set.add(str);
+        }
+
+        if (set.size === relation.length && isMinimality(arr)) {
+            return true;
+        }
+        return false;
+    };
+
+    const dfs = (arr, len, index) => {
+        if (arr.length === len) {
+            if (getHashLen(arr)) {
+                answerCombinations.push([...arr]);
+                answer++;
+            }
+            return;
+        }
+
+        for (let i = index; i < relation[0].length; i++) {
+            arr.push(i);
+            dfs(arr, len, i + 1);
+            arr.pop();
+        }
+    };
+
+    for (let i = 1; i <= relation[0].length; i++) {
+        dfs([], i, 0);
+    }
+
+    return answer;
+}
